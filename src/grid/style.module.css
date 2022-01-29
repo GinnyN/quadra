@@ -1,0 +1,21 @@
+.playboard {
+    width: 100vw;
+    display: grid;
+    grid-template-columns: auto 200px;
+}
+
+.gridSetting {
+    width: 900px;
+    height: 900px;
+    display: grid;
+    grid-template-columns: 90px 90px 90px 90px 90px 90px 90px 90px 90px 90px;
+    grid-template-rows: 90px 90px 90px 90px 90px 90px 90px 90px 90px 90px;
+    background-color: azure;
+}
+
+.gridSetting div{
+    border: 1px solid black;
+}
+.gridSetting div:hover {
+    background-color: aqua;
+}

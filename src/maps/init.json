@@ -1,0 +1,27 @@
+{
+  "00" : {
+      "player": { "team": "blue"},
+      "usable": true
+  },
+  "99" : {
+    "player": { "team": "red"},
+    "usable": true
+  },
+  "45": {
+      "player": false,
+      "usable": false
+  },
+  "44": {
+      "player": false,
+      "usable": false
+  },
+  "53": {
+      "player": false,
+      "usable": false
+  }
+  ,
+  "42": {
+      "player": false,
+      "usable": false
+  }       
+}
