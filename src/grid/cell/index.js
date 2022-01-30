@@ -1,26 +1,35 @@
 import React from "react";
 import style from "./style.module.css";
+import Character from "./character";
 
-const Cell = ({ onClick, onMove, onAttack, x, y, player, activated, usable }) => {
+const Cell = ({ onMove,
+                activateAttack, underAttack, onCross,
+                activateMove, x, y, player, activated, usable, turn }) => {
 
     const toggleDot = () => {
+
         if(!usable) return;
-        if(activated && player) {
-            onAttack({x,y});
-            return
-        }
-        if(player) {
-            onClick({x, y});
-            return
-        }
-        if(activated) {
+        if(activated && !player) {
             onMove({x, y});
             return
         }
         return
     }
-    return <div className={`${style.cell} ${usable && activated && style.activated} ${!usable && style.noUsable}`} onClick={toggleDot}>
-                { player && player.currentHP > 0 && <img className={style.dot} src={require('./../../img/dot.png')} />}
+
+    return <div className={`${style.cell} 
+                ${player.team === 'blue' && player.team === turn && style.blue} 
+                ${player.team === 'red' &&  player.team === turn && style.red} 
+                ${usable && activated && style.activated} 
+                ${usable && onCross && style.onCross} 
+                ${!usable && style.noUsable}`}
+                onClick={toggleDot} 
+            >
+                { player && player.currentHP > 0 && 
+                    <Character player={player} turn={turn} 
+                        onAttack={activateAttack}
+                        onMove={activateMove}
+                        underAttack={underAttack}
+                    />}
            </div>
 }
 

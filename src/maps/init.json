@@ -1,10 +1,18 @@
 {
   "00" : {
-      "player": { "team": "blue"},
+      "player": { "team": "blue", "tired": false},
       "usable": true
   },
   "99" : {
-    "player": { "team": "red"},
+    "player": { "team": "red", "tired": false},
+    "usable": true
+  },
+  "98" : {
+    "player": { "team": "red", "tired": false},
+    "usable": true
+  },
+  "97" : {
+    "player": { "team": "blue", "tired": false},
     "usable": true
   },
   "45": {

@@ -7,6 +7,10 @@
     background-color: cadetblue;
 }
 
+.onCross {
+    background-color: yellowgreen;
+}
+
 .noUsable {
     background-color: black;
 }
@@ -14,7 +18,10 @@
     background-color: black;
 }
 
-.dot {
-    width: 100%;
-    height: 100%;
+.blue {
+    background-color: royalblue;
+}
+
+.red {
+    background-color: indianred;
 }
