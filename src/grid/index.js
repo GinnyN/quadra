@@ -1,19 +1,41 @@
-import React, {useEffect, useState} from "react"
+import React, {useEffect, useState, useRef} from "react"
 import Cell from "./cell"
 import style  from "./style.module.css"
+import { square } from "./selection";
 
+const STYLES_GRID = {
+    SQUARE: "square",
+    STAR: "star"
+}
+
+const tiredObj = {
+    'movement': false,
+    'attack': false
+}
 const character = {
     "maxHP": 100,
     "currentHP": 100,
     "strength": 2,
     "active": false,
     "suceptible": false,
+    "movement": {
+        "amount": 2,
+        "style": STYLES_GRID.SQUARE
+    },
+    "attack": {
+        "amount": 1,
+        "style": STYLES_GRID.SQUARE
+    },
+    "tiredObj": {
+
+    }
 }
 
 const Grid = ({ map } ) => {
 
     const [cells, setCells] = useState([]);
-    const [playerActive, setPlayerActive] = useState({});
+    const playerActive = useRef({});
+    const [showMenu, setShowMenu] = useState(false);
     const [teamRed, setTeamRed] = useState([]);
     const [teamBlue, setTeamBlue] = useState([]);
     const [turn, setTurn] = useState('red');
@@ -23,16 +45,17 @@ const Grid = ({ map } ) => {
         const teamRed = [];
         const teamBlue = [];
         for(let x = 0; x < 10; x++) {
+            cells[x] = [];
             for(let y = 0; y < 10; y++) {
                 if(map[`${x}${y}`]) {
                     if(map[`${x}${y}`].player){
-                        const newChar = {...character, ...map[`${x}${y}`].player} ;
-                        cells.push({x, y, activated: false, ...map[`${x}${y}`], player: newChar });
+                        const newChar = {...character, ...map[`${x}${y}`].player, "tiredObj": {...tiredObj}} ;
+                        cells[x].push({x, y, activated: false, ...map[`${x}${y}`], player: newChar });
                         if(newChar.team === "blue") teamBlue.push(newChar);
                         else teamRed.push(newChar);
-                    } else cells.push({x, y, activated: false, ...map[`${x}${y}`], player: false});
+                    } else cells[x].push({x, y, activated: false, ...map[`${x}${y}`], player: false});
                 }
-                else cells.push({x, y, player: false, activated: false, usable: true, onCross: false });
+                else cells[x].push({x, y, player: false, activated: false, usable: true, onCross: false });
             }
         }
         setCells(cells);
@@ -40,52 +63,94 @@ const Grid = ({ map } ) => {
         setTeamBlue(teamBlue);
     }, []);
 
-    const inactivateCurrentPlayer = ({x,y}) => {
+    const movePlayer = (item, playerCurrent = false) => {
+        if(!playerCurrent) playerCurrent = playerActive.current;
+        const {x, y} = item;
         const temp = [...cells];
-        temp[10*x + y].player.tired = true;
-        if(temp[(10*playerActive.x)-1+playerActive.y]) temp[(10*playerActive.x)-1+playerActive.y].activated = false;
-        if(temp[(10*playerActive.x)+1+playerActive.y]) temp[(10*playerActive.x)+1+playerActive.y].activated = false;
-        if(temp[(10*(playerActive.x-1))+playerActive.y]) temp[(10*(playerActive.x-1))+playerActive.y].activated = false;
-        if(temp[(10*(playerActive.x+1))+playerActive.y]) temp[(10*(playerActive.x+1))+playerActive.y].activated = false;
+        temp[x][y].player = playerCurrent.player;
+        temp[x][y].player.tiredObj.movement = true;
+        temp[x][y].player.tired = (temp[x][y].player.tiredObj.movement && temp[x][y].player.tiredObj.attack);
+        playerCurrent.player = false;
         setCells(temp);
+        setShowMenu(false);
+        resetBoard(temp[x][y].player);
     }
 
-    const removeCrossCurrentPlayer = ({x,y}) => {
+    const underAttack = ({x , y}, playerCurrent = false) => {
+        console.log("under attack");
+        if(!playerCurrent) playerCurrent = playerActive.current;
         const temp = [...cells];
-        temp[10*x + y].player.tired = true;
-        if(temp[(10*playerActive.x)-1+playerActive.y]) temp[(10*playerActive.x)-1+playerActive.y].onCross = false;
-        if(temp[(10*playerActive.x)+1+playerActive.y]) temp[(10*playerActive.x)+1+playerActive.y].onCross = false;
-        if(temp[(10*(playerActive.x-1))+playerActive.y]) temp[(10*(playerActive.x-1))+playerActive.y].onCross = false;
-        if(temp[(10*(playerActive.x+1))+playerActive.y]) temp[(10*(playerActive.x+1))+playerActive.y].onCross = false;
+        temp[x][y].player.currentHP -= temp[playerCurrent.x][playerCurrent.y].player.strength;
+        temp[playerCurrent.x][playerCurrent.y].player.tiredObj.attack = true;
+        temp[playerCurrent.x][playerCurrent.y].player.tired = (temp[playerCurrent.x][playerCurrent.y].player.tiredObj.attack && temp[playerCurrent.x][playerCurrent.y].player.tiredObj.movement);
         setCells(temp);
-    }
-
-    const movePlayer = ({x, y}) => {
-        const temp = [...cells];
-        temp[10*x + y].player = temp[10*playerActive.x + playerActive.y].player;
-        if(temp[10*playerActive.x + playerActive.y]) temp[10*playerActive.x + playerActive.y].player = false;
-        setCells(temp);
-        inactivateCurrentPlayer({x, y});
-    }
-
-    const underAttack = ({x , y}) => {
-        const temp = [...cells];
-        temp[10*x + y].player.currentHP -= temp[10*playerActive.x + playerActive.y].player.strength;
-        setCells(temp);
-        removeCrossCurrentPlayer(playerActive);
+        setShowMenu(false);
+        resetBoard(playerCurrent.player);
     }
 
     const changeTurn = () => {
         if(turn==='red'){
             const teamRedT = teamRed.map((item) => {
                 item.tired = false;
+                item.tiredObj = {...tiredObj};
                 return item;
             });
             setTeamRed(teamRedT);
             setTurn('blue');
+            const temp = [...cells];
+            for(let i = 0; i < cells.length; i+=1){
+                for(let z= 0; cells[i] && (z < cells[i].length); z+=1) {
+                    if(cells[i][z].player && cells[i][z].player.team === 'blue') {
+                        playerActive.current = cells[i][z];
+                        if(!playerActive.current.player.tiredObj.attack && cells[i][z].player.team === 'blue') {
+                            activateAttack(cells[i][z]);
+                            const amount = cells[i][z].player.attack.amount;
+                            for(let moveI = amount * -1 ; moveI < amount; moveI+=1) {
+                                for(let moveZ = amount * -1; moveZ < amount; moveZ+=1) {
+                                    if(cells[i+moveI] && cells[i+moveI][z+moveZ] && 
+                                        cells[i+moveI][z+moveZ].onCross && 
+                                        cells[i+moveI][z+moveZ].player && 
+                                        cells[i+moveI][z+moveZ].player.team === 'red') {
+                                        underAttack(cells[i+moveI][z+moveZ]);
+                                        moveZ = moveI = z = 10000000000;
+                                        i = -1;
+                                    }
+                                }
+                            }
+                            resetBoard(playerActive.current.player);
+                        }
+                    }
+                }
+            }
+            for(let i = 0; i < cells.length; i+=1){
+                for(let z= 0; cells[i] && (z < cells[i].length); z+=1) {
+                    if(cells[i][z].player && cells[i][z].player.team === 'blue') {
+                        playerActive.current = cells[i][z];
+                        if(!playerActive.current.player.tiredObj.movement) {
+                            activateMove(cells[i][z]);
+                            const amount = cells[i][z].player.movement.amount;
+                            console.log(playerActive.current);
+                            for(let moveI = amount * -1 ; moveI < amount; moveI+=1) {
+                                for(let moveZ = amount * -1; moveZ < amount; moveZ+=1) {
+                                    if(cells[i+moveI] && cells[i+moveI][z+moveZ] && 
+                                        (cells[i+moveI][z+moveZ].x !== cells[i][z].x &&
+                                        cells[i+moveI][z+moveZ].y !== cells[i][z].y) &&
+                                        cells[i+moveI][z+moveZ].activated &&
+                                        !cells[i+moveI][z+moveZ].player) {
+                                        movePlayer(cells[i+moveI][z+moveZ], playerActive.current);
+                                        moveZ = moveI = z = 10000000000;
+                                        i = -1;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }        
         } else {
             const teamBlueT = teamBlue.map((item) => {
                 item.tired = false;
+                item.tiredObj = {...tiredObj};
                 return item;
             });
             setTeamBlue(teamBlueT);
@@ -93,95 +158,39 @@ const Grid = ({ map } ) => {
         }
     }
 
-    const activateAttack = ({x, y}) => {
-        const temp = [...cells];
-        if(playerActive.x === x && playerActive.y === y) {
-            if(temp[(10*x)-1+y]) {
-                if(temp[(10*x)-1+y].player) temp[(10*x)-1+y].player.suceptible = false; 
-                temp[(10*x)-1+y].onCross = false;
-            }
-            if(temp[(10*x)+1+y]){
-                if(temp[(10*x)+1+y].player) temp[(10*x)+1+y].player.suceptible = false; 
-                temp[(10*x)+1+y].onCross = false;
-            }
-            if(temp[(10*(x-1))+y]){ 
-                if(temp[(10*(x-1))+y].player) temp[(10*(x-1))+y].player.suceptible = false; 
-                temp[(10*(x-1))+y].onCross = false;
-            }
-            if(temp[(10*(x+1))+y]) {
-                if(temp[(10*(x+1))+y].player) temp[(10*(x+1))+y].player.suceptible = false; 
-                temp[(10*(x+1))+y].onCross = false;
-            }
-            setPlayerActive({});
-        } else {
-            if(playerActive.x) {
-                const {x, y} = playerActive;
-                if(temp[(10*x)-1+y]) {
-                    if(temp[(10*x)-1+y].player) temp[(10*x)-1+y].player.suceptible = false; 
-                    temp[(10*x)-1+y].onCross = false;
-                }
-                if(temp[(10*x)+1+y]){
-                    if(temp[(10*x)+1+y].player) temp[(10*x)+1+y].player.suceptible = false; 
-                    temp[(10*x)+1+y].onCross = false;
-                }
-                if(temp[(10*(x-1))+y]){ 
-                    if(temp[(10*(x-1))+y].player) temp[(10*(x-1))+y].player.suceptible = false; 
-                    temp[(10*(x-1))+y].onCross = false;
-                }
-                if(temp[(10*(x+1))+y]) {
-                    if(temp[(10*(x+1))+y].player) temp[(10*(x+1))+y].player.suceptible = false; 
-                    temp[(10*(x+1))+y].onCross = false;
-                }
-            }
-            if(temp[(10*x)-1+y]) {
-                if(temp[(10*x)-1+y].player) temp[(10*x)-1+y].player.suceptible = true; 
-                temp[(10*x)-1+y].onCross = true;
-            }
-            if(temp[(10*x)+1+y]){
-                if(temp[(10*x)+1+y].player) temp[(10*x)+1+y].player.suceptible = true; 
-                temp[(10*x)+1+y].onCross = true;
-            }
-            if(temp[(10*(x-1))+y]){ 
-                if(temp[(10*(x-1))+y].player) temp[(10*(x-1))+y].player.suceptible = true; 
-                temp[(10*(x-1))+y].onCross = true;
-            }
-            if(temp[(10*(x+1))+y]) {
-                if(temp[(10*(x+1))+y].player) temp[(10*(x+1))+y].player.suceptible = true; 
-                temp[(10*(x+1))+y].onCross = true;
-            }
-            setPlayerActive({x, y});
-        }
+    const activateAttack = (item) => {
+        resetBoard(item.player);
+        let temp = [...cells];  
+        temp = square(item, temp, "onCross", true, ["player", "suceptible"], true);
         setCells(temp);
     }
 
-    const activateMove = ({x, y}) => {
+    const activateMove = (item) => {
+        resetBoard(item.player);
         const temp = [...cells];
-        if(playerActive.x === x && playerActive.y === y) {
-            if(temp[(10*x)-1+y]) temp[(10*x)-1+y].activated = false;
-            if(temp[(10*x)+1+y]) temp[(10*x)+1+y].activated = false;
-            if(temp[(10*(x-1))+y]) temp[(10*(x-1))+y].activated = false;
-            if(temp[(10*(x+1))+y]) temp[(10*(x+1))+y].activated = false;
-            setPlayerActive({});
-        } else {
-            if(playerActive.x) {
-                const {x, y} = playerActive;
-                if(temp[(10*x)-1+y]) temp[(10*x)-1+y].activated = false;
-                if(temp[(10*x)+1+y]) temp[(10*x)+1+y].activated = false;
-                if(temp[(10*(x-1))+y]) temp[(10*(x-1))+y].activated = false;
-                if(temp[(10*(x+1))+y]) temp[(10*(x+1))+y].activated = false;
-            }
-            if(temp[(10*x)-1+y]) temp[(10*x)-1+y].activated = true;
-            if(temp[(10*x)+1+y]) temp[(10*x)+1+y].activated = true;
-            if(temp[(10*(x-1))+y])temp[(10*(x-1))+y].activated = true;
-            if(temp[(10*(x+1))+y]) temp[(10*(x+1))+y].activated = true;
-            setPlayerActive({x, y});
-        }
+        const {x, y} = item;
+        setCells(square(item, temp, "activated", true));
+    }
+
+    const resetBoard = (player) => {
+        const {x, y} = playerActive.current;
+        let temp = [...cells];
+        temp = square({x, y, player}, temp, "activated", false);
+        temp = square({x, y, player}, temp, "onCross", false, ["player", "suceptible"], false);
         setCells(temp);
+    }
+
+    const openMenu = (item) => {
+        if(playerActive.current.x){
+            playerActive.current ={};
+        }
+        playerActive.current = item;
+        setShowMenu(true);
     }
 
     return <div className={style.playboard}>
         <div className={style.gridSetting}>
-        {cells.map((item) => <Cell 
+        {cells.map((arrayX) => arrayX.map((item) => <Cell 
                 onMove={movePlayer}
                 x={item.x} 
                 y={item.y} 
@@ -190,10 +199,9 @@ const Grid = ({ map } ) => {
                 usable={item.usable}
                 onCross={item.onCross}
                 turn={turn}
-                activateAttack={() => activateAttack(item)}
-                activateMove={() => activateMove(item)}
                 underAttack={() => underAttack(item)}
-            />)}   
+                openMenu={() => openMenu(item)}
+            />))}   
         </div>
         <div>
             <p>Turn {turn}</p>
@@ -204,6 +212,12 @@ const Grid = ({ map } ) => {
                 <li>Team Blue</li>
                 {teamBlue.map((item, index)=> <li>{index}: {item.currentHP}/{item.maxHP}</li>)}
             </ul>
+            {showMenu && <div className={style.menu}>
+                <ul>
+                    <li onClick={() => activateMove(playerActive.current)}>Move</li>
+                    <li onClick={() => activateAttack(playerActive.current)}>Attack</li>
+                </ul>
+            </div> }
         </div>
     </div>;
 }

@@ -12,4 +12,6 @@
     position: fixed;
     background-color: white;
     color: black;
+    right: 0;
+    top: 10vh;
 }

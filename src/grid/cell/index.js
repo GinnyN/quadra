@@ -4,7 +4,7 @@ import Character from "./character";
 
 const Cell = ({ onMove,
                 activateAttack, underAttack, onCross,
-                activateMove, x, y, player, activated, usable, turn }) => {
+                activateMove, x, y, player, activated, usable, turn, openMenu }) => {
 
     const toggleDot = () => {
 
@@ -29,6 +29,7 @@ const Cell = ({ onMove,
                         onAttack={activateAttack}
                         onMove={activateMove}
                         underAttack={underAttack}
+                        openMenu={openMenu}
                     />}
            </div>
 }

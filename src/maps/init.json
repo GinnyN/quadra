@@ -4,7 +4,7 @@
       "usable": true
   },
   "99" : {
-    "player": { "team": "red", "tired": false},
+    "player": { "team": "blue", "tired": false},
     "usable": true
   },
   "98" : {
@@ -12,7 +12,7 @@
     "usable": true
   },
   "97" : {
-    "player": { "team": "blue", "tired": false},
+    "player": { "team": "red", "tired": false},
     "usable": true
   },
   "45": {
@@ -20,6 +20,18 @@
       "usable": false
   },
   "44": {
+      "player": false,
+      "usable": true
+  },
+  "54" : {
+    "player": { "team": "red", "tired": false},
+    "usable": true
+  },
+  "65": {
+      "player": false,
+      "usable": false
+  },
+  "64": {
       "player": false,
       "usable": false
   },

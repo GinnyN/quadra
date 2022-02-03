@@ -7,32 +7,27 @@ const STATUS = {
     MOVING: 2
 }
 
-const Character = ({ player, turn, onAttack, onMove, underAttack }) => {
+const Character = ({ player, turn, onAttack, onMove, underAttack, openMenu }) => {
     const [showMenu, setShowMenu] = useState(false);
     const [charStatus, setCharStatus] = useState(STATUS.WAIT);
 
     const toggleShowMenu = (event) => {
         event.stopPropagation();
+        console.log(player.suceptible);
         if(player.suceptible) underAttack();
         if(player.tired) return;
-        if(turn === player.team) setShowMenu(!showMenu);
-        if(charStatus === STATUS.MOVING) {
-            onMove();
-            setCharStatus(STATUS.WAIT);
-        }
+        if(turn === player.team) openMenu();
     }
 
     const innerOnMove = (event) => {
         event.stopPropagation();
         setShowMenu(!showMenu);
-        setCharStatus(STATUS.MOVING);
         onMove();
     }
 
     const innerOnAttack = (event) => {
         event.stopPropagation();
         setShowMenu(!showMenu);
-        setCharStatus(STATUS.ATTACKING);
         onAttack();
     }
 
