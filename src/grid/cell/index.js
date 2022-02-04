@@ -1,6 +1,7 @@
 import React from "react";
 import style from "./style.module.css";
 import Character from "./character";
+import 'animate.css';
 
 const Cell = ({ onMove,
                 activateAttack, underAttack, onCross,
@@ -24,7 +25,7 @@ const Cell = ({ onMove,
                 ${!usable && style.noUsable}`}
                 onClick={toggleDot} 
             >
-                { player && player.currentHP > 0 && 
+                { player && 
                     <Character player={player} turn={turn} 
                         onAttack={activateAttack}
                         onMove={activateMove}

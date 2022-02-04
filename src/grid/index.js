@@ -1,8 +1,9 @@
-import React, {useEffect, useState, useRef} from "react"
+import React, {useEffect, useState, useRef, useMemo} from "react"
 import Cell from "./cell"
 import style  from "./style.module.css"
 import { square } from "./selection";
 import { activeOnArea } from "./ai";
+import 'animate.css';
 
 const STYLES_GRID = {
     SQUARE: "square",
@@ -14,9 +15,9 @@ const tiredObj = {
     'attack': false
 }
 const character = {
-    "maxHP": 100,
-    "currentHP": 100,
-    "strength": 2,
+    "maxHP": 20,
+    "currentHP": 20,
+    "strength": 4,
     "active": false,
     "suceptible": false,
     "movement": {
@@ -27,9 +28,6 @@ const character = {
         "amount": 1,
         "style": STYLES_GRID.SQUARE
     },
-    "tiredObj": {
-
-    }
 }
 
 const Grid = ({ map } ) => {
@@ -41,6 +39,11 @@ const Grid = ({ map } ) => {
     const [teamBlue, setTeamBlue] = useState([]);
     const [turn, setTurn] = useState('red');
 
+    const pieceOn = useMemo(() => new Audio(require('./../audio/pieceOn.mp3')), []);
+    const pieceSlide = useMemo(() => new Audio(require('./../audio/pieceSlide.mp3')), []);
+    const punch = useMemo(() => new Audio(require('./../audio/punch.mp3')), []);
+    const buttonClick = useMemo(() => new Audio(require('./../audio/buttonClick.mp3')), []);
+
     useEffect (() => {
         const cells = [];
         const teamRed = [];
@@ -50,7 +53,8 @@ const Grid = ({ map } ) => {
             for(let y = 0; y < 10; y++) {
                 if(map[`${x}${y}`]) {
                     if(map[`${x}${y}`].player){
-                        const newChar = {...character, ...map[`${x}${y}`].player, "tiredObj": {...tiredObj}} ;
+                        const newChar = {...character, ...map[`${x}${y}`].player} ;
+                        newChar.tiredObj = {...tiredObj};
                         cells[x].push({x, y, activated: false, ...map[`${x}${y}`], player: newChar });
                         if(newChar.team === "blue") teamBlue.push(newChar);
                         else teamRed.push(newChar);
@@ -73,22 +77,32 @@ const Grid = ({ map } ) => {
         temp[x][y].player.tired = (temp[x][y].player.tiredObj.movement && temp[x][y].player.tiredObj.attack);
         playerCurrent.player = false;
         setCells(temp);
+        pieceSlide.play();
         setShowMenu(false);
         resetBoard(temp[x][y].player);
     }
 
-    const underAttack = ({x , y}, playerCurrent = false) => {
+    const underAttack = async ({x , y}, playerCurrent = false) => {
         if(!playerCurrent) playerCurrent = playerActive.current;
         const temp = [...cells];
         temp[x][y].player.currentHP -= temp[playerCurrent.x][playerCurrent.y].player.strength;
         temp[playerCurrent.x][playerCurrent.y].player.tiredObj.attack = true;
         temp[playerCurrent.x][playerCurrent.y].player.tired = (temp[playerCurrent.x][playerCurrent.y].player.tiredObj.attack && temp[playerCurrent.x][playerCurrent.y].player.tiredObj.movement);
+        if(temp[x][y].player.currentHP > 0) temp[x][y].player.attacked = true;
+        setCells(temp);
+        punch.play();
+
+        await new Promise((resolve) => setTimeout(resolve, 500));
+        if(temp[x][y].player.currentHP === 0) temp[x][y].player = false;
+        else temp[x][y].player.attacked = false;
         setCells(temp);
         setShowMenu(false);
         resetBoard(playerCurrent.player);
     }
 
-    const changeTurn = () => {
+    const changeTurn = async () => {
+
+        if(playerActive.current.player) resetBoard(playerActive.current.player);
         if(turn==='red'){
             const teamRedT = teamRed.map((item) => {
                 item.tired = false;
@@ -103,7 +117,9 @@ const Grid = ({ map } ) => {
                     if(cells[i][z].player && cells[i][z].player.team === 'blue') {
                         playerActive.current = cells[i][z];
                         if(!playerActive.current.player.tiredObj.attack) {
+                            await new Promise((resolve) => setTimeout(resolve, 200));
                             activateAttack(cells[i][z]);
+                            pieceOn.play();
                             const amount = cells[i][z].player.attack.amount;
                             for(let moveI = amount * -1 ; moveI <= amount; moveI+=1) {
                                 for(let moveZ = amount * -1; moveZ <= amount; moveZ+=1) {
@@ -128,7 +144,6 @@ const Grid = ({ map } ) => {
                         playerActive.current = cells[i][z];
                         if(!playerActive.current.player.tiredObj.movement) {
                             const maxMov = activeOnArea(cells, cells[i][z]);
-                            console.log(maxMov);
                             if(maxMov){
                                 activateMove(cells[i][z]);
                                 const amount = cells[i][z].player.movement.amount;
@@ -138,7 +153,8 @@ const Grid = ({ map } ) => {
                                 if(maxMov.y < 0) maxMov.y *= -1;
                                 if(maxMov.x > amount) maxMov.x = amount;
                                 if(maxMov.y > amount) maxMov.y = amount;
-                                console.log(maxMov, signs);
+                                pieceOn.play();
+                                await new Promise((resolve) => setTimeout(resolve, 900));
                                 for(let moveI = maxMov.x; moveI >= 0 ; moveI-=1) {
                                     for(let moveZ = maxMov.y; moveZ >= 0; moveZ-=1) {
                                         console.log(cells[i+(moveI*signs.x)] && cells[i+(moveI*signs.x)][z+(moveZ*signs.y)] && 
@@ -207,10 +223,12 @@ const Grid = ({ map } ) => {
 
     const openMenu = (item) => {
         if(playerActive.current.x){
+            if(playerActive.current.player) resetBoard(playerActive.current.player);
             playerActive.current ={};
         }
         playerActive.current = item;
         setShowMenu(true);
+        pieceOn.play();
     }
 
     return <div className={style.playboard}>
@@ -229,18 +247,23 @@ const Grid = ({ map } ) => {
             />))}   
         </div>
         <div>
+            <h1>Quadra</h1>
             <p>Turn {turn}</p>
             <button onClick={changeTurn}>End Turn</button>
-            <ul>
-                <li>Team Red</li>
-                {teamRed.map((item, index)=> <li>{index}: {item.currentHP}/{item.maxHP}</li>)}
-                <li>Team Blue</li>
-                {teamBlue.map((item, index)=> <li>{index}: {item.currentHP}/{item.maxHP}</li>)}
-            </ul>
             {showMenu && <div className={style.menu}>
                 <ul>
-                    <li onClick={() => activateMove(playerActive.current)}>Move</li>
-                    <li onClick={() => activateAttack(playerActive.current)}>Attack</li>
+                    {playerActive.current && 
+                    !(playerActive.current.player.tiredObj.movement) && 
+                    <li><button onClick={() => {
+                        buttonClick.play();
+                        activateMove(playerActive.current);
+                    }}>Move</button></li>}
+                    {playerActive.current && 
+                    !(playerActive.current.player.tiredObj.attack) && 
+                    <li><button onClick={() => {
+                        buttonClick.play();
+                        activateAttack(playerActive.current);
+                    }}>Attack</button></li>}
                 </ul>
             </div> }
         </div>

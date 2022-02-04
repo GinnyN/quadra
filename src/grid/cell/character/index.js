@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import style from "./style.module.css";
+import 'animate.css';
 
 const STATUS = {
     WAIT: 0,
@@ -31,20 +32,27 @@ const Character = ({ player, turn, onAttack, onMove, underAttack, openMenu }) =>
         onAttack();
     }
 
-    return <React.Fragment>
-        { showMenu && <div className={style.menu}>
-            <ul>
-                <li onClick={innerOnMove}>Move</li>
-                <li onClick={innerOnAttack}>Attack</li>
-                <li onClick={toggleShowMenu}>Close</li>
-            </ul>
-        </div> }
-        <img 
+    return <div className={style.innerCell}>
+       <div className={style.menu}>
+
+            <div style={{'background-color': 'green', 'height': '100%', 'width': `${player.currentHP * 100 / player.maxHP}%` }}>
+                </div>
+        </div> 
+
+        <svg xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 100 100"
+            height="100%"
             onClick={toggleShowMenu}
-            className={`${style.dot} ${player.tired && style.tired} `} 
-            src={require('./../../../img/dot.png')}
-        />
-    </React.Fragment>
+            className={`${style.dot} ${player.tired && style.tired} 
+            animate__animated ${player.attacked && 'animate__headShake'}
+            animate__animated  ${player.currentHP <= 0 && 'animate__fadeOut'}`} >
+
+            <circle r="30"  cx="50" cy="50"
+                stroke-width="2" stroke={`${player.team}`}
+                fill={`${turn === player.team ? '#fff' : (player.team === 'red' ? '#faa' : '#aaf')}`} />
+
+        </svg>
+    </div>
 }
 
 export default Character;

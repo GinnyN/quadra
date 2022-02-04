@@ -1,7 +1,8 @@
 
-.dot {
+.dot circle{
     width: 100%;
     height: 100%;
+    cursor: pointer;
 }
 
 .tired {
@@ -10,8 +11,21 @@
 
 .menu {
     position: fixed;
-    background-color: white;
     color: black;
-    right: 0;
-    top: 10vh;
+    background-color: #6e6d6d99;
+    margin-top: -20px;
+    width: 100px;
+    height: 10px;
+    border-radius: 100px;
+
+}
+
+.innerCell .menu {
+    display: none;
+}
+
+.innerCell:hover .menu {
+    display: block;
+    opacity: 0.9;
+    border-radius: 100px;
 }
