@@ -20,6 +20,10 @@
 
 }
 
+.menu div {
+    border-radius: 100px;
+}
+
 .innerCell .menu {
     display: none;
 }
