@@ -1,10 +1,10 @@
 {
   "00" : {
-      "player": { "team": "blue", "tired": false},
+      "player": { "team": "blue", "tired": false, "areaTarget": 4 },
       "usable": true
   },
   "99" : {
-    "player": { "team": "blue", "tired": false},
+    "player": { "team": "red", "tired": false},
     "usable": true
   },
   "98" : {
@@ -24,7 +24,15 @@
       "usable": true
   },
   "54" : {
-    "player": { "team": "red", "tired": false},
+    "player": { "team": "blue", "tired": false, "areaTarget": 4 },
+    "usable": true
+  },
+  "15" : {
+    "player": { "team": "blue", "tired": false, "areaTarget": 4 },
+    "usable": true
+  },
+  "28" : {
+    "player": { "team": "blue", "tired": false, "areaTarget": 4 },
     "usable": true
   },
   "65": {
