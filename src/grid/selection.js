@@ -19,13 +19,13 @@ const square = (item, temp, variable, value, variable2 = false, value2 = false) 
         for(let i = 0; i <= amount; i+=1) {
             for(let z = 0; z <= amount; z+=1){
                 if(item.x >= x){
-                    if(item.y <= y && temp[item.x+i][item.y-z]) {
+                    if(item.y <= y && temp[item.x+i] && temp[item.x+i][item.y-z]) {
                         temp[item.x+i][item.y-z][variable] = false;
                         if(variable2) {
                             if(temp[item.x+i][item.y-z][variable2[0]]) temp[item.x+i][item.y-z][variable2[0]][variable2[1]] = false;
                         }
                     }
-                    if(item.y >= y && temp[item.x+i][item.y+z]) {
+                    if(item.y >= y && temp[item.x+i] && temp[item.x+i][item.y+z]) {
                         temp[item.x+i][item.y+z][variable] = false;
                         if(variable2) {
                             if(temp[item.x+i][item.y+z][variable2[0]]) temp[item.x+i][item.y+z][variable2[0]][variable2[1]] = false;
@@ -33,13 +33,13 @@ const square = (item, temp, variable, value, variable2 = false, value2 = false) 
                     }
                 }
                 if(item.x <= x) {
-                    if(item.y <= y && temp[item.x-i][item.y-z]) {
+                    if(item.y <= y && temp[item.x-i] && temp[item.x-i][item.y-z]) {
                         temp[item.x-i][item.y-z][variable] = false;
                         if(variable2) {
                             if(temp[item.x-i][item.y-z][variable2[0]]) temp[item.x-i][item.y-z][variable2[0]][variable2[1]] = false;
                         }
                     }
-                    if(item.y >= y && temp[item.x-i][item.y+z]) {
+                    if(item.y >= y && temp[item.x-i] && temp[item.x-i][item.y+z]) {
                         temp[item.x-i][item.y+z][variable] = false;
                         if(variable2) {
                             if(temp[item.x-i][item.y+z][variable2[0]]) temp[item.x-i][item.y+z][variable2[0]][variable2[1]] = false;

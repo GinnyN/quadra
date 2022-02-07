@@ -30,7 +30,7 @@ const character = {
     },
 }
 
-const Grid = ({ map } ) => {
+const Grid = ({ map, setWinner } ) => {
 
     const [cells, setCells] = useState([]);
     const playerActive = useRef({});
@@ -68,6 +68,20 @@ const Grid = ({ map } ) => {
         setTeamBlue(teamBlue);
     }, []);
 
+    const checkWinner = () => {
+        if(teamBlue.reduce((sum, item) => {
+            const temp = sum + item.currentHP;
+            return temp;
+        }, 0) <= 0) {
+            setWinner('red');
+        } else if(teamRed.reduce((sum, item) => {
+            const temp = sum + item.currentHP;
+            return temp;
+        }, 0) <= 0) {
+            setWinner('blue');
+        }
+    };
+
     const movePlayer = (item, playerCurrent = false) => {
         if(!playerCurrent) playerCurrent = playerActive.current;
         const {x, y} = item;
@@ -98,6 +112,7 @@ const Grid = ({ map } ) => {
         setCells(temp);
         setShowMenu(false);
         resetBoard(playerCurrent.player);
+        checkWinner();
     }
 
     const changeTurn = async () => {
@@ -157,12 +172,6 @@ const Grid = ({ map } ) => {
                                 await new Promise((resolve) => setTimeout(resolve, 900));
                                 for(let moveI = maxMov.x; moveI >= 0 ; moveI-=1) {
                                     for(let moveZ = maxMov.y; moveZ >= 0; moveZ-=1) {
-                                        console.log(cells[i+(moveI*signs.x)] && cells[i+(moveI*signs.x)][z+(moveZ*signs.y)] && 
-                                        (cells[i+(moveI*signs.x)][z+(moveZ*signs.y)].x !== cells[i][z].x &&
-                                        cells[i+(moveI*signs.x)][z+(moveZ*signs.y)].y !== cells[i][z].y) &&
-                                        cells[i+(moveI*signs.x)][z+(moveZ*signs.y)].activated &&
-                                        !cells[i+(moveI*signs.x)][z+(moveZ*signs.y)].player);
-                                        console.log(!cells[i+(moveI*signs.x)][z+(moveZ*signs.y)].player)
                                         if(cells[i+(moveI*signs.x)] && cells[i+(moveI*signs.x)][z+(moveZ*signs.y)] &&
                                             cells[i+(moveI*signs.x)][z+(moveZ*signs.y)].activated &&
                                             !cells[i+(moveI*signs.x)][z+(moveZ*signs.y)].player) {

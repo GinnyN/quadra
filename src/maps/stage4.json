@@ -1,0 +1,98 @@
+{
+    "00" : {
+        "player": { "team": "blue", "tired": false, "areaTarget": 4 },
+        "usable": true
+    },
+    "99" : {
+      "player": { "team": "red", "tired": false},
+      "usable": true
+    },
+    "98" : {
+      "player": { "team": "red", "tired": false},
+      "usable": true
+    },
+    "97" : {
+      "player": { "team": "red", "tired": false},
+      "usable": true
+    },
+    "59" : {
+      "player": { "team": "blue", "tired": false, "areaTarget": 4 },
+      "usable": true
+    },
+    "19" : {
+      "player": { "team": "blue", "tired": false, "areaTarget": 4 },
+      "usable": true
+    },
+    "29" : {
+      "player": { "team": "blue", "tired": false, "areaTarget": 4 },
+      "usable": true
+    },
+    "91" : {
+        "player": { "team": "blue", "tired": false, "areaTarget": 4 },
+        "usable": true
+      },
+      "72" : {
+        "player": { "team": "blue", "tired": false, "areaTarget": 4 },
+        "usable": true
+      },
+      "51" : {
+        "player": { "team": "blue", "tired": false, "areaTarget": 4 },
+        "usable": true
+      },
+    "54" : {
+        "player": { "team": "blue", "tired": false, "areaTarget": 4 },
+        "usable": true
+      },
+      "15" : {
+        "player": { "team": "blue", "tired": false, "areaTarget": 4 },
+        "usable": true
+      },
+      "28" : {
+        "player": { "team": "blue", "tired": false, "areaTarget": 4 },
+        "usable": true
+      },
+    "92": {
+        "player": false,
+        "usable": false
+    },
+    "83": {
+        "player": false,
+        "usable": false
+    },
+    "74": {
+        "player": false,
+        "usable": false
+    },
+    "65": {
+        "player": false,
+        "usable": false
+    } ,
+    "43": {
+        "player": false,
+        "usable": false
+    },
+    "44": {
+        "player": false,
+        "usable": false
+    },
+    "53": {
+        "player": false,
+        "usable": false
+    },
+    "55": {
+        "player": false,
+        "usable": false
+    } ,
+    "17": {
+        "player": false,
+        "usable": false
+    }  ,
+    "26": {
+        "player": false,
+        "usable": false
+    }  ,
+    "25": {
+        "player": false,
+        "usable": false
+    }      
+  }

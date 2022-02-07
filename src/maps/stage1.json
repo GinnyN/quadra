@@ -1,0 +1,96 @@
+{
+    "99" : {
+        "player": { "team": "red", "tired": false},
+        "usable": true
+      },
+      "98" : {
+        "player": { "team": "red", "tired": false},
+        "usable": true
+      },
+      "97" : {
+        "player": { "team": "red", "tired": false},
+        "usable": true
+      },
+    "00" : {
+        "player": { "team": "blue", "tired": false, "areaTarget": 4 },
+        "usable": true
+    },
+    "45": {
+        "player": false,
+        "usable": false
+    },
+    "44": {
+        "player": false,
+        "usable": true
+    },
+    "54" : {
+      "player": { "team": "blue", "tired": false, "areaTarget": 4 },
+      "usable": true
+    },
+    "14" : {
+      "player": { "team": "blue", "tired": false, "areaTarget": 4 },
+      "usable": true
+    },
+    "28" : {
+      "player": { "team": "blue", "tired": false, "areaTarget": 4 },
+      "usable": true
+    },
+    "82" : {
+        "player": { "team": "blue", "tired": false, "areaTarget": 4 },
+        "usable": true
+      },
+    "56": {
+        "player": false,
+        "usable": false
+    },
+    "57": {
+        "player": false,
+        "usable": false
+    },
+    "68": {
+        "player": false,
+        "usable": false
+    }
+    ,
+    "58": {
+        "player": false,
+        "usable": false
+    },
+    "15": {
+        "player": false,
+        "usable": false
+    },
+    "17": {
+        "player": false,
+        "usable": false
+    },
+    "18": {
+        "player": false,
+        "usable": false
+    }
+    ,
+    "35": {
+        "player": false,
+        "usable": false
+    },
+    "51": {
+        "player": false,
+        "usable": false
+    },
+    "71": {
+        "player": false,
+        "usable": false
+    },
+    "81": {
+        "player": false,
+        "usable": false
+    },
+    "52": {
+        "player": false,
+        "usable": false
+    },
+    "22": {
+        "player": false,
+        "usable": false
+    }          
+  }

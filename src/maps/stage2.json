@@ -1,0 +1,103 @@
+{
+    "99" : {
+        "player": { "team": "red", "tired": false},
+        "usable": true
+      },
+      "98" : {
+        "player": { "team": "red", "tired": false},
+        "usable": true
+      },
+      "97" : {
+        "player": { "team": "red", "tired": false},
+        "usable": true
+      },
+    "00" : {
+        "player": { "team": "blue", "tired": false, "areaTarget": 6 },
+        "usable": true
+    },
+    "21" : {
+        "player": { "team": "blue", "tired": false, "areaTarget": 6 },
+        "usable": true
+    },
+    "63" : {
+        "player": { "team": "blue", "tired": false, "areaTarget": 6 },
+        "usable": true
+    },
+    "05": {
+        "player": false,
+        "usable": false
+    },
+    "24": {
+        "player": false,
+        "usable": false
+    },
+    "25": {
+        "player": false,
+        "usable": false
+    },
+    "15": {
+        "player": false,
+        "usable": false
+    },
+    "44": {
+        "player": false,
+        "usable": false
+    },
+    "53": {
+        "player": false,
+        "usable": false
+    },
+    "45": {
+        "player": false,
+        "usable": false
+    },
+    "55": {
+        "player": false,
+        "usable": false
+    },
+    "43": {
+        "player": false,
+        "usable": false
+    },
+    "83": {
+        "player": false,
+        "usable": false
+    },
+    "93": {
+        "player": false,
+        "usable": false
+    },
+    "73": {
+        "player": false,
+        "usable": false
+    },
+    "72": {
+        "player": false,
+        "usable": false
+    },
+    "47": {
+        "player": false,
+        "usable": false
+    },
+    "48": {
+        "player": false,
+        "usable": false
+    },
+    "56" : {
+      "player": { "team": "blue", "tired": false, "areaTarget": 4 },
+      "usable": true
+    },
+    "14" : {
+      "player": { "team": "blue", "tired": false, "areaTarget": 4 },
+      "usable": true
+    },
+    "28" : {
+      "player": { "team": "blue", "tired": false, "areaTarget": 4 },
+      "usable": true
+    },
+    "82" : {
+        "player": { "team": "blue", "tired": false, "areaTarget": 4 },
+        "usable": true
+    }
+
+}

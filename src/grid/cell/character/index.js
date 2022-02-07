@@ -14,7 +14,6 @@ const Character = ({ player, turn, onAttack, onMove, underAttack, openMenu }) =>
 
     const toggleShowMenu = (event) => {
         event.stopPropagation();
-        console.log(player.suceptible);
         if(player.suceptible) underAttack();
         if(player.tired) return;
         if(turn === player.team) openMenu();
