@@ -1,54 +1,54 @@
 {
     "00" : {
-        "player": { "team": "blue", "tired": false, "areaTarget": 4 },
+        "player": { "team": "blue", "tired": false, "areaTarget": 4, "class": "scout"  },
         "usable": true
     },
     "99" : {
-      "player": { "team": "red", "tired": false},
+      "player": { "team": "red", "tired": false, "class": "scout" },
       "usable": true
     },
     "98" : {
-      "player": { "team": "red", "tired": false},
+      "player": { "team": "red", "tired": false, "class": "scout" },
       "usable": true
     },
     "97" : {
-      "player": { "team": "red", "tired": false},
+      "player": { "team": "red", "tired": false, "class": "scout" },
       "usable": true
     },
     "59" : {
-      "player": { "team": "blue", "tired": false, "areaTarget": 4 },
+      "player": { "team": "blue", "tired": false, "areaTarget": 4, "class": "scout"  },
       "usable": true
     },
     "19" : {
-      "player": { "team": "blue", "tired": false, "areaTarget": 4 },
+      "player": { "team": "blue", "tired": false, "areaTarget": 4, "class": "scout"  },
       "usable": true
     },
     "29" : {
-      "player": { "team": "blue", "tired": false, "areaTarget": 4 },
+      "player": { "team": "blue", "tired": false, "areaTarget": 4, "class": "scout"  },
       "usable": true
     },
     "91" : {
-        "player": { "team": "blue", "tired": false, "areaTarget": 4 },
+        "player": { "team": "blue", "tired": false, "areaTarget": 4, "class": "scout"  },
         "usable": true
       },
       "72" : {
-        "player": { "team": "blue", "tired": false, "areaTarget": 4 },
+        "player": { "team": "blue", "tired": false, "areaTarget": 4, "class": "scout"  },
         "usable": true
       },
       "51" : {
-        "player": { "team": "blue", "tired": false, "areaTarget": 4 },
+        "player": { "team": "blue", "tired": false, "areaTarget": 4, "class": "scout"  },
         "usable": true
       },
     "54" : {
-        "player": { "team": "blue", "tired": false, "areaTarget": 4 },
+        "player": { "team": "blue", "tired": false, "areaTarget": 4, "class": "scout"  },
         "usable": true
       },
       "15" : {
-        "player": { "team": "blue", "tired": false, "areaTarget": 4 },
+        "player": { "team": "blue", "tired": false, "areaTarget": 4, "class": "scout"  },
         "usable": true
       },
       "28" : {
-        "player": { "team": "blue", "tired": false, "areaTarget": 4 },
+        "player": { "team": "blue", "tired": false, "areaTarget": 4, "class": "scout"  },
         "usable": true
       },
     "92": {

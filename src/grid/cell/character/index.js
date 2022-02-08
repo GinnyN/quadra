@@ -38,17 +38,22 @@ const Character = ({ player, turn, onAttack, onMove, underAttack, openMenu }) =>
                 </div>
         </div> 
 
-        <svg xmlns="http://www.w3.org/2000/svg"
+         <svg xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 100 100"
             height="100%"
+            width="100%"
             onClick={toggleShowMenu}
             className={`${style.dot} ${player.tired && style.tired} 
             animate__animated ${player.attacked && 'animate__headShake'}
             animate__animated  ${player.currentHP <= 0 && 'animate__fadeOut'}`} >
 
-            <circle r="30"  cx="50" cy="50"
+            {player.class === 'scout' && <circle r="30"  cx="50" cy="50"
                 stroke-width="2" stroke={`${player.team}`}
-                fill={`${turn === player.team ? '#fff' : (player.team === 'red' ? '#faa' : '#aaf')}`} />
+                fill={`${turn === player.team ? '#fff' : (player.team === 'red' ? '#faa' : '#aaf')}`} />}
+
+            {player.class === 'soldier' && 
+                <rect width="60" height="60" stroke={`${player.team}`} x="20" y="20"
+                fill={`${turn === player.team ? '#fff' : (player.team === 'red' ? '#faa' : '#aaf')}`} stroke-width="2"/> }
 
         </svg>
     </div>

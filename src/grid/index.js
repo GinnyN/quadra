@@ -14,20 +14,42 @@ const tiredObj = {
     'movement': false,
     'attack': false
 }
-const character = {
-    "maxHP": 20,
-    "currentHP": 20,
-    "strength": 4,
-    "active": false,
-    "suceptible": false,
-    "movement": {
-        "amount": 2,
-        "style": STYLES_GRID.SQUARE
+
+const crit = 3;
+
+const characterClasses = {
+    "scout": {
+        "maxHP": 20,
+        "currentHP": 20,
+        "strength": 4,
+        "luck": 2,
+        "active": false,
+        "suceptible": false,
+        "movement": {
+            "amount": 4,
+            "style": STYLES_GRID.SQUARE
+        },
+        "attack": {
+            "amount": 1,
+            "style": STYLES_GRID.SQUARE
+        },
     },
-    "attack": {
-        "amount": 1,
-        "style": STYLES_GRID.SQUARE
-    },
+    "soldier": {
+        "maxHP": 30,
+        "currentHP": 30,
+        "strength": 4,
+        "luck": 3,
+        "active": false,
+        "suceptible": false,
+        "movement": {
+            "amount": 2,
+            "style": STYLES_GRID.SQUARE
+        },
+        "attack": {
+            "amount": 3,
+            "style": STYLES_GRID.SQUARE
+        },
+    }
 }
 
 const Grid = ({ map, setWinner } ) => {
@@ -43,6 +65,7 @@ const Grid = ({ map, setWinner } ) => {
     const pieceSlide = useMemo(() => new Audio(require('./../audio/pieceSlide.mp3')), []);
     const punch = useMemo(() => new Audio(require('./../audio/punch.mp3')), []);
     const buttonClick = useMemo(() => new Audio(require('./../audio/buttonClick.mp3')), []);
+    const explosion = useMemo(() => new Audio(require('./../audio/explosion.mp3')), []);
 
     useEffect (() => {
         const cells = [];
@@ -53,7 +76,7 @@ const Grid = ({ map, setWinner } ) => {
             for(let y = 0; y < 10; y++) {
                 if(map[`${x}${y}`]) {
                     if(map[`${x}${y}`].player){
-                        const newChar = {...character, ...map[`${x}${y}`].player} ;
+                        const newChar = {...characterClasses[map[`${x}${y}`].player.class], ...map[`${x}${y}`].player} ;
                         newChar.tiredObj = {...tiredObj};
                         cells[x].push({x, y, activated: false, ...map[`${x}${y}`], player: newChar });
                         if(newChar.team === "blue") teamBlue.push(newChar);
@@ -99,15 +122,21 @@ const Grid = ({ map, setWinner } ) => {
     const underAttack = async ({x , y}, playerCurrent = false) => {
         if(!playerCurrent) playerCurrent = playerActive.current;
         const temp = [...cells];
-        temp[x][y].player.currentHP -= temp[playerCurrent.x][playerCurrent.y].player.strength;
+        const innerCrit = (Math.random() * 20) < temp[playerCurrent.x][playerCurrent.y].player.luck;
+        if(innerCrit) {
+            temp[x][y].player.currentHP -= temp[playerCurrent.x][playerCurrent.y].player.strength * crit; 
+        } else {
+            temp[x][y].player.currentHP -= temp[playerCurrent.x][playerCurrent.y].player.strength;
+        }
         temp[playerCurrent.x][playerCurrent.y].player.tiredObj.attack = true;
         temp[playerCurrent.x][playerCurrent.y].player.tired = (temp[playerCurrent.x][playerCurrent.y].player.tiredObj.attack && temp[playerCurrent.x][playerCurrent.y].player.tiredObj.movement);
         if(temp[x][y].player.currentHP > 0) temp[x][y].player.attacked = true;
         setCells(temp);
-        punch.play();
+        if(innerCrit) explosion.play();
+        else punch.play();
 
         await new Promise((resolve) => setTimeout(resolve, 500));
-        if(temp[x][y].player.currentHP === 0) temp[x][y].player = false;
+        if(temp[x][y].player.currentHP <= 0) temp[x][y].player = false;
         else temp[x][y].player.attacked = false;
         setCells(temp);
         setShowMenu(false);
@@ -118,6 +147,7 @@ const Grid = ({ map, setWinner } ) => {
     const changeTurn = async () => {
 
         if(playerActive.current.player) resetBoard(playerActive.current.player);
+        playerActive.current = {};
         if(turn==='red'){
             const teamRedT = teamRed.map((item) => {
                 item.tired = false;

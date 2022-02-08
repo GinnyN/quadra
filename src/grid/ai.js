@@ -4,7 +4,7 @@ const activeOnArea = (grid, cell) => {
         for(let z = -cell.player.areaTarget; z < cell.player.areaTarget; z+=1){
             if(grid[x+i] && grid[x+i][y+z] && grid[x+i][y+z].player && 
                grid[x+i][y+z].player.team !== cell.player.team) {
-                   return {'x': i, 'y': z};
+                   return {'x': i - cell.player.attack.amount + 1, 'y': z  - cell.player.attack.amount + 1};
             }
         }    
     }

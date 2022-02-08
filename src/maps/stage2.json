@@ -1,26 +1,26 @@
 {
     "99" : {
-        "player": { "team": "red", "tired": false},
+        "player": { "team": "red", "tired": false, "class": "scout" },
         "usable": true
       },
       "98" : {
-        "player": { "team": "red", "tired": false},
+        "player": { "team": "red", "tired": false, "class": "scout" },
         "usable": true
       },
       "97" : {
-        "player": { "team": "red", "tired": false},
+        "player": { "team": "red", "tired": false, "class": "scout" },
         "usable": true
       },
     "00" : {
-        "player": { "team": "blue", "tired": false, "areaTarget": 6 },
+        "player": { "team": "blue", "tired": false, "areaTarget": 6, "class": "scout"  },
         "usable": true
     },
     "21" : {
-        "player": { "team": "blue", "tired": false, "areaTarget": 6 },
+        "player": { "team": "blue", "tired": false, "areaTarget": 6, "class": "scout"  },
         "usable": true
     },
     "63" : {
-        "player": { "team": "blue", "tired": false, "areaTarget": 6 },
+        "player": { "team": "blue", "tired": false, "areaTarget": 6, "class": "scout"  },
         "usable": true
     },
     "05": {
@@ -84,19 +84,19 @@
         "usable": false
     },
     "56" : {
-      "player": { "team": "blue", "tired": false, "areaTarget": 4 },
+      "player": { "team": "blue", "tired": false, "areaTarget": 4, "class": "scout"  },
       "usable": true
     },
     "14" : {
-      "player": { "team": "blue", "tired": false, "areaTarget": 4 },
+      "player": { "team": "blue", "tired": false, "areaTarget": 4, "class": "scout"  },
       "usable": true
     },
     "28" : {
-      "player": { "team": "blue", "tired": false, "areaTarget": 4 },
+      "player": { "team": "blue", "tired": false, "areaTarget": 4, "class": "scout"  },
       "usable": true
     },
     "82" : {
-        "player": { "team": "blue", "tired": false, "areaTarget": 4 },
+        "player": { "team": "blue", "tired": false, "areaTarget": 4, "class": "scout"  },
         "usable": true
     }
 
